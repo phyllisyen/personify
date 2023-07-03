@@ -1,11 +1,17 @@
 from flask import Flask, request
+from dotenv import load_dotenv
 import telebot
 import random
 import requests
+import os
+
+load_dotenv()  # take environment variables from .env.
 
 # Create a new instance of the bot
-bot = telebot.TeleBot('6136687473:AAFCjhjpwcfRce8RTG0TK_JiLzA8kolwVvM')
-bot.set_webhook(url='https://personify-wjek.onrender.com')
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
+
+if os.getenv("ENV") == "PROD":
+    bot.set_webhook(url='https://personify-wjek.onrender.com')
 
 
 # Create a Flask web application
@@ -44,6 +50,7 @@ response_sent = False  # Flag to track if a response has been sent for the curre
 # Handle the "/prompt" command
 @bot.message_handler(commands=['prompt'])
 def prompt(message):
+    print("something")
     global response_sent
 
     # Check if all prompts have been used
@@ -142,13 +149,14 @@ def handle_message(message):
 
 @app.route('/', methods=['POST'])
 def webhook():
+    print("goodbye")
     # Retrieve the update from the request
     update = telebot.types.Update.de_json(request.get_json(force=True))
-
-
+    print("hello")
+    print(update)
     # Process the update using your bot instance
     bot.process_new_updates([update])
-
+    print("test")
     return 'OK', 200
 
 
