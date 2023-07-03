@@ -8,7 +8,7 @@ import os
 load_dotenv()  # take environment variables from .env.
 
 # Create a new instance of the bot
-bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"),threaded=False)
 
 if os.getenv("ENV") == "PROD":
     bot.set_webhook(url='https://personify-wjek.onrender.com')
