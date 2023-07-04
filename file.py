@@ -4,6 +4,8 @@ import telebot
 import random
 import requests
 import os
+import openai
+
 
 load_dotenv()  # take environment variables from .env.
 
@@ -102,13 +104,14 @@ api_endpoint = "https://api.pawan.krd/v1/chat/completions"
 # Function to send user input to the ChatGPT API
 def send_to_chatgpt(user_input):
     # Set up the API request payload
+    
     payload = {
         "messages": [
             {"role": "system", "content": "prompt"},
             {"role": "user", "content": user_input}
         ],
         "temperature": 0.5,  # Adjust temperature value as needed
-        "max_tokens": 1500  # Adjust max tokens value as needed
+        "max_tokens": 1000  # Adjust max tokens value as needed
     }
     headers = {'content-type': 'application/json', "Authorization": "Bearer pk-xpCZtZfUyiOBDdEVcTUEriUXaySHMJnpGwdWVQULZdyoRWDO"}
 
@@ -139,13 +142,36 @@ def handle_message(message):
         # Check if a response has already been sent for the current prompt
         if not response_sent:
             # Send user input to the ChatGPT API
-            generated_response = send_to_chatgpt('How is this description of ' + sent_prompts[-1] + ' inherently biased: ' + user_input + ' and what would be a more accurate depiction of ' + sent_prompts[-1] + ' and real-life examples of these individuals who differ from my description?' +' . Additionally, what are some steps I can take to reduce my unconscious bias?')
+            send_message = 'How is this description of ' + sent_prompts[-1] + ' inherently biased: ' + user_input + ' and what would be a more accurate depiction of ' + sent_prompts[-1] + ' and real-life examples of these individuals who differ from my description?' +' . Additionally, what are some steps I can take to reduce my unconscious bias?'
+            # generated_response = send_to_chatgpt(send_message)
+            generated_response = send_chatgpt_api(send_message)
 
             if generated_response:
                 # Send the generated response back to the user
                 bot.send_message(message.chat.id,generated_response)
 
             response_sent = True  # Update the flag after sending the response
+
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def send_chatgpt_api(user_input):
+    try:
+        completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "prompt"},
+                {"role": "user", "content": user_input}
+            ],
+            max_tokens=50
+        )
+        # Parse and return the generated response from the API
+        generated_response = completion.choices[0].message.content
+        print(generated_response)
+        return generated_response
+    except requests.exceptions.RequestException as e:
+        print("Error occurred:", e)
+        return None
 
 @app.route('/', methods=['POST'])
 def webhook():
