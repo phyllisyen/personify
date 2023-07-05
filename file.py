@@ -23,11 +23,6 @@ app = Flask(__name__)
 # Handle the /start command
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Welcome to personify, your unbiased companion!🤖\n\npersonify is here to help you uncover and challenge unconscious bias in your everday interactions.\n\n🔹To get started, simply type /join and let the exploration begin!\n🔹 For a list of available commands, type /help.\n🔹 To learn more about the purpose and functionality of personify, type /info.\n\nHappy exploring with personify!✨")
-    
-# Handle the /info command
-@bot.message_handler(commands=['join'])
-def join(message):
     bot.send_message(message.chat.id, "We're excited to have you onboard!🤝 \n This is how personify works:\n\n1️⃣ You will receive a short prompt describing someone. \n2️⃣ You'll need to respond with your impression of the person in a single message. Impressions can include, but are not exclusive to the gender, race, physical appearance, character traits, educational background, social class and sexual orientation of the person. You do not have to touch on every category if your impression is neutral in those aspects.\n3️⃣ We will evaluate your response and provide feedback on how unconscious bias was present in your impression.\n\nOnce you are ready, type /prompt to begin!")
 
 # Define the list of predefined messages
@@ -81,12 +76,11 @@ def prompt(message):
 def help_command(message):
     commands = [
         '/start - Start the bot',
-        '/join - Receive instructions',
         '/help - Show available commands',
         '/prompt - Receive your prompt',
         '/reset - Reset bot'
     ]
-    help_text = "Available commands:\n\n" + "\n".join(commands)
+    help_text = "Available commands:\n\n" + "\n".start(commands)
     bot.send_message(message.chat.id, help_text)
 
 
@@ -163,11 +157,11 @@ def send_chatgpt_api(user_input):
                 {"role": "system", "content": "prompt"},
                 {"role": "user", "content": user_input}
             ],
-            max_tokens=50
+            max_tokens=500
         )
         # Parse and return the generated response from the API
         generated_response = completion.choices[0].message.content
-        print(generated_response)
+        print(generated_response + "\n\nType /prompt to receive a new message.")
         return generated_response
     except requests.exceptions.RequestException as e:
         print("Error occurred:", e)
@@ -193,4 +187,3 @@ def home():
 if __name__ == "__main__":
    # app.run(debug=True, port = 5001)
     bot.polling()
-
