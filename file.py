@@ -161,8 +161,7 @@ def send_chatgpt_api(user_input):
         )
         # Parse and return the generated response from the API
         generated_response = completion.choices[0].message.content
-        to_send = generated_response + "\n\nType /prompt to receive a new message."
-        print(to_send)
+        print(generated_response)
         return generated_response
     except requests.exceptions.RequestException as e:
         print("Error occurred:", e)
