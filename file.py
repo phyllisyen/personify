@@ -136,7 +136,7 @@ def handle_message(message):
         # Check if a response has already been sent for the current prompt
         if not response_sent:
             # Send user input to the ChatGPT API
-            send_message = 'How is this description of ' + sent_prompts[-1] + ' inherently biased: ' + user_input + ' and what would be a more accurate depiction of ' + sent_prompts[-1] + ' and real-life examples of these individuals who differ from my description?' +' . Additionally, what are some steps I can take to reduce my unconscious bias?'
+            send_message = 'How is this description of ' + sent_prompts[-1] + ' inherently biased: ' + user_input + ' and what would be a more accurate depiction of ' + sent_prompts[-1] + ' and real-life examples of these individuals who differ from my description?' +' . Additionally, what are some steps I can take everyday to reduce my unconscious bias?'
             # generated_response = send_to_chatgpt(send_message)
             generated_response = send_chatgpt_api(send_message)
 
