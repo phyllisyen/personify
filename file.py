@@ -25,7 +25,7 @@ app = Flask(__name__)
 # Handle the /start command
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "We're excited to have you onboard!🤝 \n This is how personify works:\n\n1️ You will receive a short prompt describing someone. \n2️ You'll need to respond with your impression of the person in a single message. Impressions can include, but are not exclusive to the gender, race, physical appearance, character traits, educational background, social class and sexual orientation of the person. You do not have to touch on every category if your impression is neutral in those aspects.\n3️ We will evaluate your response and provide feedback on how unconscious bias was present in your impression.\n\nOnce you are ready, type /prompt to begin!")
+    bot.send_message(message.chat.id, "We're excited to have you onboard!🤝 \n This is how personify works:\n\n1️⃣ You will receive a short prompt describing someone. \n2️⃣ You'll need to respond with your impression of the person in a single message. Impressions can include, but are not exclusive to the gender, race, physical appearance, character traits, educational background, social class and sexual orientation of the person. You do not have to touch on every category if your impression is neutral in those aspects.\n3️⃣ We will evaluate your response and provide feedback on how unconscious bias was present in your impression.\n\nOnce you are ready, type /prompt to begin!")
 
 # Define the list of predefined messages
 prompts = [
@@ -136,7 +136,7 @@ def handle_message(message):
         user_input = message.text
 
         # Check if a response has already been sent for the current prompt
-        if not response_sent:
+        if not response_sent and len(sent_prompts) > 0:
             # Send user input to the ChatGPT API
             send_message = 'How is this description of ' + sent_prompts[-1] + ' inherently biased: ' + user_input + ' and what would be a more accurate depiction of ' + sent_prompts[-1] + ' and real-life examples of these individuals who differ from my description?' +' . Additionally, what are some steps I can take everyday to reduce this unconscious bias?'
             # generated_response = send_to_chatgpt(send_message)
@@ -175,7 +175,7 @@ def webhook():
     # Retrieve the update from the request
     update = telebot.types.Update.de_json(request.get_json(force=True))
     print("hello")
-    print(update)
+    print(update.message.text)
     # Process the update using your bot instance
     bot.process_new_updates([update])
     print("test")
