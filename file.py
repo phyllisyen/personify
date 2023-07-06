@@ -82,7 +82,7 @@ def help_command(message):
         '/prompt - Receive your prompt',
         '/reset - Reset bot'
     ]
-    help_text = "Available commands:\n\n" + "\n".start(commands)
+    help_text = "Available commands:\n\n" + "\n".join(commands)
     bot.send_message(message.chat.id, help_text)
 
 
